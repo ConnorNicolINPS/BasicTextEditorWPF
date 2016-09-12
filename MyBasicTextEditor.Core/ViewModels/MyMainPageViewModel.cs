@@ -14,6 +14,10 @@ namespace MyBasicTextEditor
 
         private List<string> templateList;
         private string selectedTemplate;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MyMainPageViewModel"/> class.
+        /// </summary>
         public MyMainPageViewModel()
         {
             this.PatientList = new List<Patient>()
@@ -42,38 +46,72 @@ namespace MyBasicTextEditor
 
             this.SelectedPatient = PatientList[0];
         }
-        
 
+        /// <summary>
+        /// Gets or sets the patient list.
+        /// </summary>
+        /// <value>
+        /// The patient list.
+        /// </value>
         public List<Patient> PatientList
         {
             get { return patientList; }
             set { patientList = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the selected patient.
+        /// </summary>
+        /// <value>
+        /// The selected patient.
+        /// </value>
         public Patient SelectedPatient
         {
             get { return selectedPatient; }
             set { selectedPatient = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the tag list.
+        /// </summary>
+        /// <value>
+        /// The tag list.
+        /// </value>
         public List<Tags> TagList
         {
             get { return this.tagList; }
             set { this.tagList = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the template list.
+        /// </summary>
+        /// <value>
+        /// The template list.
+        /// </value>
         public List<string> TemplateList
         {
             get { return this.templateList; }
             set { this.SetProperty(ref this.templateList, value); }
         }
 
+        /// <summary>
+        /// Gets or sets the selected template.
+        /// </summary>
+        /// <value>
+        /// The selected template.
+        /// </value>
         public string SelectedTemplate
         {
             get { return this.selectedTemplate; }
             set { this.SetProperty(ref this.selectedTemplate, value); }
         }
 
+        /// <summary>
+        /// Replaces the tag.
+        /// </summary>
+        /// <param name="tag">The tag.</param>
+        /// <returns></returns>
         public string ReplaceTag(string tag)
         {
             switch (tag)
@@ -118,6 +156,10 @@ namespace MyBasicTextEditor
             }
         }
 
+        /// <summary>
+        /// Sets the templates.
+        /// </summary>
+        /// <param name="templates">The templates.</param>
         public void SetTemplates(List<string> templates)
         {
             this.TemplateList = templates;

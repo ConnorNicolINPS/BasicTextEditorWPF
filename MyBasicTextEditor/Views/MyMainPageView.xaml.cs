@@ -20,11 +20,17 @@ namespace MyBasicTextEditor
         private string docText = string.Empty;
         private Document WordDoc = new Document();
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MyMainPage"/> class.
+        /// </summary>
         public MyMainPage()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Gets the templates.
+        /// </summary>
         private void GetTemplates()
         {
             DirectoryInfo dir = new DirectoryInfo(@"C:\Users\andrew.rae\Desktop\TestTemplates\");
@@ -42,7 +48,12 @@ namespace MyBasicTextEditor
             }
         }
 
-        private void SaveBttn_Click(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// Handles the Click event of the SaveBttn control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
+/        private void SaveBttn_Click(object sender, RoutedEventArgs e)
         {
             object missing = System.Reflection.Missing.Value;
             object Visible = true;
@@ -67,12 +78,22 @@ namespace MyBasicTextEditor
             }
         }
 
-        private void replaceTagBttn_Click(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// Handles the Click event of the replaceTagBttn control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
+/        private void replaceTagBttn_Click(object sender, RoutedEventArgs e)
         {
             var currentViewModel = this.ViewModel as MyMainPageViewModel;
 
         }
 
+        /// <summary>
+        /// Handles the Click event of the LaunchBttn control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private void LaunchBttn_Click(object sender, RoutedEventArgs e)
         {
             ApplicationClass WordApp = new ApplicationClass();
@@ -86,10 +107,10 @@ namespace MyBasicTextEditor
                 WordDoc.SaveAs(saveFilePath + "TestBPLetter" + currentViewModel.SelectedPatient.Forename); // save template as document so you ont overwirte the template
                 WordDoc = WordApp.Documents.Open(saveFilePath + "TestBPLetter" + currentViewModel.SelectedPatient.Forename + ".docx"); // open the newly saved doc to read the text
 
-                Range rng = wordDoc.Range();
-                int count = wordDoc.Sections.Count;
-                Range headerRange = wordDoc.Sections[1].Headers[Microsoft.Office.Interop.Word.WdHeaderFooterIndex.wdHeaderFooterPrimary].Range;
-                Range footerRange = wordDoc.Sections[count].Footers[Microsoft.Office.Interop.Word.WdHeaderFooterIndex.wdHeaderFooterPrimary].Range;
+                Range rng = WordDoc.Range();
+                int count = WordDoc.Sections.Count;
+                Range headerRange = WordDoc.Sections[1].Headers[Microsoft.Office.Interop.Word.WdHeaderFooterIndex.wdHeaderFooterPrimary].Range;
+                Range footerRange = WordDoc.Sections[count].Footers[Microsoft.Office.Interop.Word.WdHeaderFooterIndex.wdHeaderFooterPrimary].Range;
 
 
                 Find documentFindObject = rng.Find;
@@ -132,11 +153,21 @@ namespace MyBasicTextEditor
             }
         }
 
+        /// <summary>
+        /// Handles the Click event of the TemplateBttn control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private void TemplateBttn_Click(object sender, RoutedEventArgs e)
         {
             this.GetTemplates();
         }
 
+        /// <summary>
+        /// Handles the Click event of the printWithOptions control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private void printWithOptions_Click(object sender, RoutedEventArgs e)
         {
             ApplicationClass WordApp = new ApplicationClass();
@@ -152,6 +183,11 @@ namespace MyBasicTextEditor
             var dialogResult = dialog.Show();
         }
 
+        /// <summary>
+        /// Handles the Click event of the SilentHiddenPrint control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private void SilentHiddenPrint_Click(object sender, RoutedEventArgs e)
         {
             ApplicationClass WordApp = new ApplicationClass();
@@ -166,6 +202,12 @@ namespace MyBasicTextEditor
             ///wordDoc.PrintOut();
         }
 
+
+        /// <summary>
+        /// Handles the TextChanged event of the rtbEditor control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="System.Windows.Controls.TextChangedEventArgs"/> instance containing the event data.</param>
         private void rtbEditor_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
             docText = new TextRange(this.rtbEditor.Document.ContentStart, this.rtbEditor.Document.ContentEnd).Text;
