@@ -1,0 +1,41 @@
+﻿<view:MvxWpfView x:Class="MyBasicTextEditor.MyMainPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:MyBasicTextEditor"
+      xmlns:view="clr-namespace:MvvmCross.Wpf.Views;assembly=MvvmCross.Wpf"
+      mc:Ignorable="d"
+      d:DataContext="{d:DesignData MyMainPageViewModel}"
+      Name="MainPage">
+    <DockPanel>
+        <ToolBar DockPanel.Dock="Top">
+            <TextBlock Text="Patients:" VerticalAlignment="Center"/>
+            <ComboBox x:Name="PatientsComboBox" 
+                      Text="Patients" 
+                      Width="200"
+                      SelectedItem="{Binding SelectedPatient}"
+                      ItemsSource="{Binding PatientList}"
+                      DisplayMemberPath="DisplayName" 
+                      Margin="0,0,20,0"/>
+
+            <Button x:Name="replaceTagBttn" Click="replaceTagBttn_Click">
+                <TextBlock Text="replace" Width="40" Height="16" Margin="0,0,20,0" />
+            </Button>
+            <TextBlock Text="templates:" VerticalAlignment="Center"/>
+            <ComboBox x:Name="TemplatesComboBox" 
+                      Text="templates" 
+                      MinWidth="200"
+                      SelectedItem="{Binding SelectedTemplate}"
+                      ItemsSource="{Binding TemplateList}"/>
+
+            <Button x:Name="TemplateBttn" Click="TemplateBttn_Click">
+                <TextBlock Text="Get Templates" Height="16" />
+            </Button>
+            <Button x:Name="LaunchBttn" Background="Blue" Foreground="White" Padding="10" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Click="LaunchBttn_Click">
+                <TextBlock Text="LaunchTemplate" />
+            </Button>
+        </ToolBar>
+        <RichTextBox Name="rtbEditor"/>
+    </DockPanel>
+</view:MvxWpfView>
