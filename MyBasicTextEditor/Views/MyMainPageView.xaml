@@ -32,10 +32,16 @@
             <Button x:Name="TemplateBttn" Click="TemplateBttn_Click">
                 <TextBlock Text="Get Templates" Height="16" />
             </Button>
-            <Button x:Name="LaunchBttn" Background="Blue" Foreground="White" Padding="10" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Click="LaunchBttn_Click">
+            <Button x:Name="LaunchBttn" Background="Blue" Foreground="White" Padding="10" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Margin="10,0" Click="LaunchBttn_Click">
                 <TextBlock Text="LaunchTemplate" />
             </Button>
+            <Button x:Name="SilentHiddenPrint" Background="Green" Foreground="White" Padding="10" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Margin="10,0" Click="SilentHiddenPrint_Click">
+                <TextBlock Text="Silent hidden Print" />
+            </Button>
+            <Button x:Name="printWithOptions" Background="red" Foreground="White" Padding="10" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Margin="10,0" Click="printWithOptions_Click">
+                <TextBlock Text="Print With Options" />
+            </Button>
         </ToolBar>
-        <RichTextBox Name="rtbEditor"/>
+        <RichTextBox Name="rtbEditor" TextChanged="rtbEditor_TextChanged" />
     </DockPanel>
 </view:MvxWpfView>

@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Documents;
 using MyBasicTextEditor.Core.Models;
 using System.IO;
+using System.Windows.Media;
 
 namespace MyBasicTextEditor
 {
@@ -16,6 +17,9 @@ namespace MyBasicTextEditor
     /// </summary>
     public partial class MyMainPage : MvxWpfView
     {
+        private string docText = string.Empty;
+        private Document WordDoc = new Document();
+
         public MyMainPage()
         {
             InitializeComponent();
@@ -72,16 +76,15 @@ namespace MyBasicTextEditor
         private void LaunchBttn_Click(object sender, RoutedEventArgs e)
         {
             ApplicationClass WordApp = new ApplicationClass();
-            Document wordDoc = new Document();
             var currentViewModel = this.ViewModel as MyMainPageViewModel;
             if (currentViewModel.SelectedTemplate != null)
             {
                 object templatePath = @"C:\Users\andrew.rae\Desktop\TestTemplates\" + currentViewModel.SelectedTemplate + ".dotx";
                 string saveFilePath = @"C:\Users\andrew.rae\Desktop\TestTemplates\";
 
-                wordDoc = WordApp.Documents.Add(templatePath); // open the template
-                wordDoc.SaveAs(saveFilePath + "TestBPLetter" + currentViewModel.SelectedPatient.Forename); // save template as document so you ont overwirte the template
-                wordDoc = WordApp.Documents.Open(saveFilePath + "TestBPLetter" + currentViewModel.SelectedPatient.Forename + ".docx"); // open the newly saved doc to read the text
+                WordDoc = WordApp.Documents.Add(templatePath); // open the template
+                WordDoc.SaveAs(saveFilePath + "TestBPLetter" + currentViewModel.SelectedPatient.Forename); // save template as document so you ont overwirte the template
+                WordDoc = WordApp.Documents.Open(saveFilePath + "TestBPLetter" + currentViewModel.SelectedPatient.Forename + ".docx"); // open the newly saved doc to read the text
 
                 Range rng = wordDoc.Range();
                 int count = wordDoc.Sections.Count;
@@ -132,6 +135,40 @@ namespace MyBasicTextEditor
         private void TemplateBttn_Click(object sender, RoutedEventArgs e)
         {
             this.GetTemplates();
+        }
+
+        private void printWithOptions_Click(object sender, RoutedEventArgs e)
+        {
+            ApplicationClass WordApp = new ApplicationClass();
+
+            WordApp.Visible = true;
+            WordDoc = WordApp.Documents.Add();
+
+            Range rng = WordDoc.Range();
+
+            rng.Text = docText;
+
+            Dialog dialog = WordApp.Dialogs[WdWordDialog.wdDialogFilePrint];
+            var dialogResult = dialog.Show();
+        }
+
+        private void SilentHiddenPrint_Click(object sender, RoutedEventArgs e)
+        {
+            ApplicationClass WordApp = new ApplicationClass();
+
+            WordApp.Visible = true;
+            WordDoc = WordApp.Documents.Add();
+
+            Range rng = WordDoc.Range();
+
+            rng.Text = docText;
+
+            ///wordDoc.PrintOut();
+        }
+
+        private void rtbEditor_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            docText = new TextRange(this.rtbEditor.Document.ContentStart, this.rtbEditor.Document.ContentEnd).Text;
         }
     }
 }
