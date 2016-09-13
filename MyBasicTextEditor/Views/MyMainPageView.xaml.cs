@@ -434,9 +434,7 @@ namespace MyBasicTextEditor
             WordApp.Visible = true;
             WordDoc = WordApp.Documents.Add();
 
-            Range rng = WordDoc.Range();
-
-            rng.Text = docText;
+            this.FormatWordDoc();
 
             Dialog dialog = WordApp.Dialogs[WdWordDialog.wdDialogFilePrint];
             var dialogResult = dialog.Show();
@@ -454,6 +452,13 @@ namespace MyBasicTextEditor
             WordApp.Visible = true;
             WordDoc = WordApp.Documents.Add();
 
+            this.FormatWordDoc();
+
+            ///WordDoc.PrintOut();
+        }
+
+        private void FormatWordDoc()
+        {
             foreach (System.Windows.Documents.Paragraph para in Workspace.Document.Blocks)
             {
                 foreach (var inline in para.Inlines)
@@ -462,18 +467,9 @@ namespace MyBasicTextEditor
                     var inlineText = new TextRange(inline.ContentStart, inline.ContentEnd);
                     wordPara.Range.Text = inlineText.Text;
 
-                    if (inlineText.GetPropertyValue(Inline.TextDecorationsProperty) == TextDecorations.Underline)
-                    {
-                        wordPara.Range.Font.Underline = WdUnderline.wdUnderlineSingle;
-                    }
-                    if (inlineText.GetPropertyValue(TextElement.FontStyleProperty).ToString() == "Italic")
-                    {
-                        wordPara.Range.Font.Italic = 1;
-                    }
-                    if (inlineText.GetPropertyValue(TextElement.FontStyleProperty).ToString() == "Bold")
-                    {
-                        wordPara.Range.Font.Bold = 1; 
-                    }
+                    wordPara.Range.Font.Underline = inlineText.GetPropertyValue(Inline.TextDecorationsProperty) == TextDecorations.Underline ? WdUnderline.wdUnderlineSingle : WdUnderline.wdUnderlineNone;
+                    wordPara.Range.Font.Italic = inlineText.GetPropertyValue(TextElement.FontStyleProperty).ToString().Equals("Italic") ? 1 : 0;
+                    wordPara.Range.Font.Bold = inlineText.GetPropertyValue(TextElement.FontWeightProperty).ToString().Equals("Bold") ? 1 : 0;
 
                     SolidColorBrush SCBrush = (SolidColorBrush)inline.Foreground;
                     wordPara.Range.Font.Color = (WdColor)(SCBrush.Color.R + 0x100 * SCBrush.Color.G + 0x10000 * SCBrush.Color.B);
@@ -482,8 +478,6 @@ namespace MyBasicTextEditor
                     wordPara.Range.InsertParagraphAfter();
                 }
             }
-
-            ///WordDoc.PrintOut();
         }
 
 
