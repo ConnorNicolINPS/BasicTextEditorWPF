@@ -82,7 +82,7 @@ namespace MyBasicTextEditor.Core.Models
 
         private string GetDisplayAddress()
         {
-            string newLine = " ^l ";
+            string newLine = " \n ";
 
             string addressFull = this.NameNum + " " + this.StreetName + newLine;
             addressFull += this.Town + newLine;
