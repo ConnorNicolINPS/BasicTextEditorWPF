@@ -189,6 +189,14 @@
     <Resource Include="Images\Save.png" />
     <Resource Include="Images\Underline.png" />
     <Resource Include="Images\Undo.png" />
+    <Resource Include="Images\Template.png" />
+    <Resource Include="Images\Silent.png" />
+    <Resource Include="Images\Word.png" />
+    <Resource Include="Images\Insert.png" />
+    <Resource Include="Images\Replace.png" />
+    <Resource Include="Images\GetTemplates.png" />
+    <Content Include="Images\Search.png" />
+    <Resource Include="Images\Print.png" />
     <Content Include="microsoft.windows.shell.dll" />
   </ItemGroup>
   <ItemGroup />
