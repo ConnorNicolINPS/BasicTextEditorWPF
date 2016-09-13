@@ -208,7 +208,7 @@
                                   Width="200"
                                   IsEditable="True"
                                   IsReadOnly="True"
-                                  Selector.IsSelected="{Binding SelectedTag}"
+                                  SelectedItem="{Binding SelectedTag}"
                                   ItemsSource="{Binding TagList}"
                                   DisplayMemberPath="DisplayValue" 
                                   Margin="0,0,20,0"/>
