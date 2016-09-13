@@ -123,10 +123,11 @@
                         <my:RibbonButton.ControlSizeDefinition>
                             <my:RibbonControlSizeDefinition ImageSize="Large" />
                         </my:RibbonButton.ControlSizeDefinition>
+                        <Label Content="Silent Hidden Print" />
                     </my:RibbonButton>
                 </my:RibbonGroup>
                 <my:RibbonGroup Header="Font Color">
-                    <my:RibbonButton Width="53" Height="Auto" LargeImageSource="/Images/FontColor.png" ToolTip="Change font color" Click="btn_Font_Click" Margin="5,20,5,5">
+                    <my:RibbonButton Width="53" Height="Auto" LargeImageSource="/Images/FontColor.png" ToolTip="Change font color" Label="Font Colour"  Click="btn_Font_Click" Margin="5,20,5,5">
                         <my:RibbonButton.ControlSizeDefinition>
                             <my:RibbonControlSizeDefinition ImageSize="Large" />
                         </my:RibbonButton.ControlSizeDefinition>
@@ -147,43 +148,74 @@
             </my:RibbonTab>
             <my:RibbonTab Header="Word Export and Printing">
                 <my:RibbonGroup Header="Print">
-                    <Label Content="Silent Hidden Print"/>
-                    <my:RibbonButton LargeImageSource="/Images/Silent.png" Label="Silent hidden Print" x:Name="SilentHiddenPrint"  Foreground="White" Padding="10" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Margin="10,0" Click="SilentHiddenPrint_Click"/>
-                    <Label Content="Silent Hidden Print"/>
-                    <my:RibbonButton LargeImageSource="/Images/Print.png" Label="Print with Options" x:Name="printWithOptions" Foreground="White" Padding="10" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Margin="10,0" Click="printWithOptions_Click" />
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        <my:RibbonButton LargeImageSource="/Images/Silent.png" Label="Silent hidden Print" x:Name="SilentHiddenPrint" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Click="SilentHiddenPrint_Click" Grid.Column="0" Grid.Row="0"/>
+                        <Label Content="Silent Hidden Print" Grid.Column="0" Grid.Row="1"/>
+                        <my:RibbonButton LargeImageSource="/Images/Print.png" Label="Print with Options" x:Name="printWithOptions" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Click="printWithOptions_Click" Grid.Column="1" Grid.Row="0"/>
+                        <Label Content="Print With Options" Grid.Column="1" Grid.Row="1"/>
+                    </Grid>
                 </my:RibbonGroup>
                 <my:RibbonGroup Header="Find and Replace">
-                    <Label Content="Patient:"/>
-                    <ComboBox x:Name="PatientsComboBox"
-                              Text="Patients" 
-                              Width="200"
-                              IsEditable="True" 
-                              IsReadOnly="True"
-                              SelectedItem="{Binding SelectedPatient}"
-                              ItemsSource="{Binding PatientList}"
-                              DisplayMemberPath="DisplayName" 
-                              Margin="0,0,20,0"/>
-                    <Label Content="Templates:"/>
-                    <ComboBox x:Name="TemplatesComboBox" 
-                              Text="Templates" 
-                              MinWidth="200"
-                              IsEditable="True" 
-                              IsReadOnly="True"
-                              SelectedItem="{Binding SelectedTemplate}"
-                              ItemsSource="{Binding TemplateList}"/>
-                    <Label Content="Tags:"/>
-                    <ComboBox x:Name="TagsComboBox" 
-                              Text="tags" 
-                              Width="200"
-                              IsEditable="True"
-                              IsReadOnly="True"
-                              Selector.IsSelected="{Binding SelectedTag}"
-                              ItemsSource="{Binding TagList}"
-                              DisplayMemberPath="DisplayValue" 
-                              Margin="0,0,10,0"/>
-                    <my:RibbonButton LargeImageSource="/Images/Replace.png" x:Name="replaceTagBttn" Label="Replace Tag" Click="replaceTagBttn_Click"/>
-                    <my:RibbonButton LargeImageSource="/Images/Insert.png" x:Name="insertTagBttn" Label="Insert Tag" Click="insertTagBttn_Click"/>
-                    <my:RibbonButton LargeImageSource="/Images/GetTemplates.png" x:Name="TemplateBttn" Label="Get Templates" Click="TemplateBttn_Click"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="23"/>
+                            <RowDefinition Height="23"/>
+                            <RowDefinition Height="23"/>
+                        </Grid.RowDefinitions>
+                    <Label Content="Patient:" Grid.Column="0" Grid.Row="0"/>
+                        <ComboBox x:Name="PatientsComboBox"
+                                  Grid.Column="1"
+                                  Grid.Row="0"
+                                  Text="Patients" 
+                                  Width="200"
+                                  IsEditable="True" 
+                                  IsReadOnly="True"
+                                  SelectedItem="{Binding SelectedPatient}"
+                                  ItemsSource="{Binding PatientList}"
+                                  DisplayMemberPath="DisplayName" 
+                                  Margin="0,0,20,0"/>
+                        <Label Content="Templates:" Grid.Column="0" Grid.Row="1"/>
+                        <ComboBox x:Name="TemplatesComboBox" 
+                                  Grid.Column="1"
+                                  Grid.Row="1"
+                                  Text="Templates" 
+                                  MinWidth="200"
+                                  IsEditable="True" 
+                                  IsReadOnly="True"
+                                  Margin="0,0,20,0"
+                                  SelectedItem="{Binding SelectedTemplate}"
+                                  ItemsSource="{Binding TemplateList}"/>
+                        <Label Content="Tags:" Grid.Column="0" Grid.Row="2"/>
+                        <ComboBox x:Name="TagsComboBox" 
+                                  Grid.Column="1"
+                                  Grid.Row="2"
+                                  Text="tags" 
+                                  Width="200"
+                                  IsEditable="True"
+                                  IsReadOnly="True"
+                                  Selector.IsSelected="{Binding SelectedTag}"
+                                  ItemsSource="{Binding TagList}"
+                                  DisplayMemberPath="DisplayValue" 
+                                  Margin="0,0,20,0"/>
+                        <my:RibbonButton LargeImageSource="/Images/Replace.png" x:Name="replaceTagBttn" Label="Replace Tag" Click="replaceTagBttn_Click" Grid.Column="2" Grid.Row="0" Grid.RowSpan="3"/>
+                        <my:RibbonButton LargeImageSource="/Images/Insert.png" x:Name="insertTagBttn" Label="Insert Tag" Click="insertTagBttn_Click" Grid.Column="3" Grid.Row="0" Grid.RowSpan="3"/>
+                        <my:RibbonButton LargeImageSource="/Images/GetTemplates.png" x:Name="TemplateBttn" Label="Get Templates" Click="TemplateBttn_Click" Grid.Column="4" Grid.Row="0" Grid.RowSpan="3"/>
+                    </Grid>
                 </my:RibbonGroup>
                 <my:RibbonGroup Header="Launch Word"> 
                     <my:RibbonButton LargeImageSource="/Images/Word.png" x:Name="LaunchBttn" Foreground="White" Padding="10" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Margin="10,0" Click="LaunchBttn_Click">
