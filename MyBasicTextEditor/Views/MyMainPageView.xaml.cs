@@ -454,9 +454,34 @@ namespace MyBasicTextEditor
             WordApp.Visible = true;
             WordDoc = WordApp.Documents.Add();
 
-            Range rng = WordDoc.Range();
+            foreach (System.Windows.Documents.Paragraph para in Workspace.Document.Blocks)
+            {
+                foreach (var inline in para.Inlines)
+                {
+                    var wordPara = WordDoc.Content.Paragraphs.Add();
+                    var inlineText = new TextRange(inline.ContentStart, inline.ContentEnd);
+                    wordPara.Range.Text = inlineText.Text;
 
-            rng.Text = docText;
+                    if (inlineText.GetPropertyValue(Inline.TextDecorationsProperty) == TextDecorations.Underline)
+                    {
+                        wordPara.Range.Font.Underline = WdUnderline.wdUnderlineSingle;
+                    }
+                    else if (inlineText.GetPropertyValue(TextElement.FontStyleProperty).ToString() == "Italic")
+                    {
+                        wordPara.Range.Font.Italic = 1;
+                    }
+                    else if (inlineText.GetPropertyValue(TextElement.FontStyleProperty).ToString() == "Bold")
+                    {
+                        wordPara.Range.Font.Bold = 1; 
+                    }
+
+                    SolidColorBrush SCBrush = (SolidColorBrush)inline.Foreground;
+                    wordPara.Range.Font.Color = (WdColor)(SCBrush.Color.R + 0x100 * SCBrush.Color.G + 0x10000 * SCBrush.Color.B);
+                    wordPara.Range.Font.Size = (float)inline.FontSize;
+                    wordPara.Range.Font.Name = inline.FontFamily.ToString();
+                    wordPara.Range.InsertParagraphAfter();
+                }
+            }
 
             ///WordDoc.PrintOut();
         }
@@ -483,6 +508,10 @@ namespace MyBasicTextEditor
             this.Insert(currentViewModel.SelectedTag.Tag);
         }
 
+        /// <summary>
+        /// Inserts the specified insert string.
+        /// </summary>
+        /// <param name="insertString">The insert string.</param>
         private void Insert(string insertString)
         {
             Workspace.CaretPosition.InsertTextInRun(insertString);
