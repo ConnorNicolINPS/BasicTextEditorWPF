@@ -53,7 +53,7 @@ namespace MyBasicTextEditor
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
-/        private void SaveBttn_Click(object sender, RoutedEventArgs e)
+        private void SaveBttn_Click(object sender, RoutedEventArgs e)
         {
             object missing = System.Reflection.Missing.Value;
             object Visible = true;
@@ -83,9 +83,14 @@ namespace MyBasicTextEditor
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
-/        private void replaceTagBttn_Click(object sender, RoutedEventArgs e)
+        private void replaceTagBttn_Click(object sender, RoutedEventArgs e)
         {
             var currentViewModel = this.ViewModel as MyMainPageViewModel;
+
+            string newText = currentViewModel.ReplaceAllTags(this.docText);
+
+            rtbEditor.Document.Blocks.Clear();
+            this.Insert(newText);
 
         }
 
@@ -199,7 +204,7 @@ namespace MyBasicTextEditor
 
             rng.Text = docText;
 
-            ///wordDoc.PrintOut();
+            ///WordDoc.PrintOut();
         }
 
 
@@ -211,6 +216,29 @@ namespace MyBasicTextEditor
         private void rtbEditor_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
             docText = new TextRange(this.rtbEditor.Document.ContentStart, this.rtbEditor.Document.ContentEnd).Text;
+        }
+
+        /// <summary>
+        /// Handles the Click event of the insertTagBttn control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
+        private void insertTagBttn_Click(object sender, RoutedEventArgs e)
+        {
+            var currentViewModel = this.ViewModel as MyMainPageViewModel;
+            this.Insert(currentViewModel.SelectedTag.Tag);
+        }
+
+        private void Insert(string insertString)
+        {
+            rtbEditor.CaretPosition.InsertTextInRun(insertString);
+
+            TextPointer moveTo = rtbEditor.CaretPosition.GetNextContextPosition(LogicalDirection.Forward);
+
+            if (moveTo != null)
+            {
+                rtbEditor.CaretPosition = moveTo;
+            }
         }
     }
 }

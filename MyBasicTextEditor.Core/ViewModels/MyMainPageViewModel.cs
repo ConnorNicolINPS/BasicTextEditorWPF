@@ -11,6 +11,7 @@ namespace MyBasicTextEditor
         private Patient selectedPatient;
 
         private List<Tags> tagList;
+        private Tags selectedTag;
 
         private List<string> templateList;
         private string selectedTemplate;
@@ -28,7 +29,7 @@ namespace MyBasicTextEditor
                 new Patient("Alex", "Rider", DateTime.Parse("01/01/2006"),123456666, new List<string>() {"Dave"}),
                 new Patient("Sherlock", "Holmes", DateTime.Parse("01/06/1854"),123455555),
                 new Patient("Tony", "Stark", DateTime.Parse("29/05/1970"),123444444),
-                new Patient("Albus", "Dumbledore", DateTime.Parse("29/05/1881"),123444444, new List<string>() {"Percival", "Wulfric", "Brian"})
+                new Patient("Albus", "Dumbledore", DateTime.Parse("29/05/1881"),123333333, new List<string>() {"Percival", "Wulfric", "Brian"})
             };
 
             this.TagList = new List<Tags>()
@@ -108,6 +109,18 @@ namespace MyBasicTextEditor
         }
 
         /// <summary>
+        /// Gets or sets the selected tag.
+        /// </summary>
+        /// <value>
+        /// The selected tag.
+        /// </value>
+        public Tags SelectedTag
+        {
+            get { return selectedTag; }
+            set { selectedTag = value; }
+        }
+
+        /// <summary>
         /// Replaces the tag.
         /// </summary>
         /// <param name="tag">The tag.</param>
@@ -154,6 +167,15 @@ namespace MyBasicTextEditor
                     }
 
             }
+        }
+
+        public string ReplaceAllTags(string text)
+        {
+            foreach (Tags tag in TagList)
+            {
+               text = text.Replace(tag.Tag, ReplaceTag(tag.Tag));
+            }
+            return text;
         }
 
         /// <summary>
