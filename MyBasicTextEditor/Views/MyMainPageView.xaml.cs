@@ -341,10 +341,17 @@ namespace MyBasicTextEditor
         {
             var currentViewModel = this.ViewModel as MyMainPageViewModel;
 
-            string newText = currentViewModel.ReplaceAllTags(this.docText);
+            if (currentViewModel.SelectedPatient != null)
+            {
+                string newText = currentViewModel.ReplaceAllTags(this.docText);
 
-            Workspace.Document.Blocks.Clear();
-            this.Insert(newText);
+                Workspace.Document.Blocks.Clear();
+                this.Insert(newText);
+            }
+            else
+            {
+                MessageBox.Show("please select the patient whos data you want to replace the tags with", "Select Tag");
+            }
 
         }
 
@@ -499,7 +506,15 @@ namespace MyBasicTextEditor
         private void insertTagBttn_Click(object sender, RoutedEventArgs e)
         {
             var currentViewModel = this.ViewModel as MyMainPageViewModel;
-            this.Insert(currentViewModel.SelectedTag.Tag);
+
+            if (currentViewModel.SelectedTag != null)
+            {
+                this.Insert(currentViewModel.SelectedTag.Tag);
+            }
+            else
+            {
+                MessageBox.Show("please select a tag to be inserted", "Select Tag");
+            }
         }
 
         /// <summary>
