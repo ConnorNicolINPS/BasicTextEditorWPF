@@ -1,14 +1,19 @@
-﻿using Microsoft.Office.Interop.Word;
-using MvvmCross.Wpf.Views;
-using System;
-using System.Diagnostics;
+﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Documents;
-using MyBasicTextEditor.Core.Models;
-using System.IO;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using Microsoft.Office.Interop.Word;
+using Microsoft.Win32;
+using MvvmCross.Wpf.Views;
+using MyBasicTextEditor.Core.Models;
 
 namespace MyBasicTextEditor
 {
@@ -26,6 +31,255 @@ namespace MyBasicTextEditor
         public MyMainPage()
         {
             InitializeComponent();
+            _fontFamily.ItemsSource = Fonts.SystemFontFamilies;
+            _fontSize.ItemsSource = FontSizes;
+        }
+
+        /// <summary>
+        /// Gets the font sizes.
+        /// </summary>
+        /// <value>
+        /// The font sizes.
+        /// </value>
+        public double[] FontSizes
+        {
+            get
+            {
+                return new double[] { 3.0, 4.0, 5.0, 6.0, 6.5, 7.0, 7.5, 8.0, 8.5, 9.0, 9.5, 10.0, 10.5, 11.0, 11.5, 12.0, 12.5,13.0,13.5,14.0, 15.0,16.0, 17.0, 18.0, 19.0, 20.0, 22.0, 24.0, 26.0, 28.0, 30.0,32.0, 34.0, 36.0, 38.0, 40.0, 44.0, 48.0, 52.0, 56.0, 60.0, 64.0, 68.0, 72.0, 76.0,80.0, 88.0, 96.0, 104.0, 112.0, 120.0, 128.0, 136.0, 144.0};
+            }
+        }
+
+        /// <summary>
+        /// Applies the property value to selected text.
+        /// </summary>
+        /// <param name="DependencyPropertyformattingProperty">The dependency propertyformatting property.</param>
+        /// <param name="value">The value.</param>
+        void ApplyPropertyValueToSelectedText(DependencyProperty formattingProperty, object value)
+        {
+            if (value == null)
+                return;
+            Workspace.Selection.ApplyPropertyValue(formattingProperty, value);
+        }
+
+        /// <summary>
+        /// Handles the SelectionChanged event of the FontFamily control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="SelectionChangedEventArgs"/> instance containing the event data.</param>
+        private void FontFamily_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            try
+            {
+                FontFamily editValue = (FontFamily)e.AddedItems[0];
+                ApplyPropertyValueToSelectedText(TextElement.FontFamilyProperty, editValue);
+            }
+            catch (Exception) { }
+        }
+
+        /// <summary>
+        /// Handles the SelectionChanged event of the FontSize control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="SelectionChangedEventArgs"/> instance containing the event data.</param>
+        private void FontSize_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            try
+            {
+                ApplyPropertyValueToSelectedText(TextElement.FontSizeProperty, e.AddedItems[0]);
+            }
+            catch (Exception) { }
+        }
+
+        /// <summary>
+        /// Updates the state of the item checked.
+        /// </summary>
+        /// <param name="button">The button.</param>
+        /// <param name="DependencyPropertyformattingProperty">The dependency propertyformatting property.</param>
+        /// <param name="expectedValue">The expected value.</param>
+        void UpdateItemCheckedState(ToggleButton button, DependencyProperty formattingProperty, object expectedValue)
+        {
+            object currentValue = Workspace.Selection.GetPropertyValue(formattingProperty);
+            button.IsChecked = (currentValue == DependencyProperty.UnsetValue) ? false : currentValue != null && currentValue.Equals(expectedValue);
+        }
+
+        /// <summary>
+        /// Updates the state of the toggle button.
+        /// </summary>
+        private void UpdateToggleButtonState()
+        {
+            UpdateItemCheckedState(_btnItalic, TextElement.FontStyleProperty, FontStyles.Italic);
+            UpdateItemCheckedState(_btnUnderline, Inline.TextDecorationsProperty, TextDecorations.Underline);
+            UpdateItemCheckedState(_btnAlignLeft, System.Windows.Documents.Paragraph.TextAlignmentProperty, TextAlignment.Left);
+            UpdateItemCheckedState(_btnAlignCenter, System.Windows.Documents.Paragraph.TextAlignmentProperty, TextAlignment.Center);
+            UpdateItemCheckedState(_btnAlignRight, System.Windows.Documents.Paragraph.TextAlignmentProperty, TextAlignment.Right);
+            UpdateItemCheckedState(_btnAlignJustify, System.Windows.Documents.Paragraph.TextAlignmentProperty, TextAlignment.Right);
+        }
+
+        /// <summary>
+        /// Updates the type of the selection list.
+        /// </summary>
+        private void UpdateSelectionListType()
+        {
+            System.Windows.Documents.Paragraph startParagraph = Workspace.Selection.Start.Paragraph;
+            System.Windows.Documents.Paragraph endParagraph = Workspace.Selection.End.Paragraph;
+            System.Windows.Documents.Paragraph Paragraph = Workspace.Selection.End.Paragraph;
+            if (startParagraph != null && endParagraph != null && (startParagraph.Parent is ListItem) && (endParagraph.Parent is ListItem) && object.ReferenceEquals(((ListItem)startParagraph.Parent).List, ((ListItem)endParagraph.Parent).List))
+            {
+                TextMarkerStyle markerStyle = ((ListItem)startParagraph.Parent).List.MarkerStyle;
+                if (markerStyle == TextMarkerStyle.Disc) //bullets  
+                {
+                    _btnBullets.IsChecked = true;
+                }
+                else if (markerStyle == TextMarkerStyle.Decimal) //number  
+                {
+                    _btnNumbers.IsChecked = true;
+                }
+            }
+            else
+            {
+                _btnBullets.IsChecked = false;
+                _btnNumbers.IsChecked = false;
+            }
+        }
+
+        /// <summary>
+        /// Updates the selected font family.
+        /// </summary>
+        private void UpdateSelectedFontFamily()
+        {
+            object value = Workspace.Selection.GetPropertyValue(TextElement.FontFamilyProperty);
+            FontFamily currentFontFamily = (FontFamily)((value == DependencyProperty.UnsetValue) ? null : value);
+            if (currentFontFamily != null)
+            {
+                _fontFamily.SelectedItem = currentFontFamily;
+            }
+        }
+
+        /// <summary>
+        /// Updates the size of the selected font.
+        /// </summary>
+        private void UpdateSelectedFontSize()
+        {
+            object value = Workspace.Selection.GetPropertyValue(TextElement.FontSizeProperty);
+            _fontSize.SelectedValue = (value == DependencyProperty.UnsetValue) ? null : value;
+        }
+
+        /// <summary>
+        /// Updates the state of the visual.
+        /// </summary>
+        private void UpdateVisualState()
+        {
+            UpdateToggleButtonState();
+            UpdateSelectionListType();
+            UpdateSelectedFontFamily();
+            UpdateSelectedFontSize();
+        }
+
+        /// <summary>
+        /// Handles the SelectionChanged event of the Workspace control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
+        private void Workspace_SelectionChanged(object sender, RoutedEventArgs e)
+        {
+            UpdateVisualState();
+        }
+
+        /// <summary>
+        /// Selects the img.
+        /// </summary>
+        /// <param name="RichTextBoxrc">The rich text boxrc.</param>
+        public void selectImg(RichTextBox rc)
+        {
+            OpenFileDialog dlg = new OpenFileDialog();
+            dlg.Filter = "Image files (*.jpg, *.jpeg,*.gif, *.png) | *.jpg; *.jpeg; *.gif; *.png";
+            var result = dlg.ShowDialog();
+            if (result.Value)
+            {
+                Uri uri = new Uri(dlg.FileName, UriKind.Relative);
+                BitmapImage bitmapImg = new BitmapImage(uri);
+                Image image = new Image();
+                image.Stretch = Stretch.Fill;
+                image.Width = 250;
+                image.Height = 200;
+                image.Source = bitmapImg;
+                var tp = rc.CaretPosition.GetInsertionPosition(LogicalDirection.Forward);
+                new InlineUIContainer(image, tp);
+            }
+        }
+
+        /// <summary>
+        /// Handles the Click event of the btn_importimg control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
+        private void btn_importimg_Click(object sender, RoutedEventArgs e)
+        {
+            selectImg(Workspace);
+        }
+
+        /// <summary>
+        /// Fontcolors the specified rich text boxrc.
+        /// </summary>
+        /// <param name="RichTextBoxrc">The rich text boxrc.</param>
+        private void fontcolor(RichTextBox rc)
+        {
+            var colorDialog = new System.Windows.Forms.ColorDialog();
+            if (colorDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                var wpfcolor = Color.FromArgb(colorDialog.Color.A, colorDialog.Color.R, colorDialog.Color.G, colorDialog.Color.B);
+                TextRange range = new TextRange(rc.Selection.Start, rc.Selection.End);
+                range.ApplyPropertyValue(FlowDocument.ForegroundProperty, new SolidColorBrush(wpfcolor));
+            }
+        }
+
+        /// <summary>
+        /// Handles the Click event of the btn_Font control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
+        private void btn_Font_Click(object sender, RoutedEventArgs e)
+        {
+            fontcolor(Workspace);
+        }
+
+        /// <summary>
+        /// Handles the Click event of the btn_SaveDoc control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
+        private void btn_SaveDoc_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog savefile = new SaveFileDialog();
+            // set a default file name  
+            savefile.FileName = "unknown.doc";
+            // set filters - this can be done in properties as well  
+            savefile.Filter = "Document files (*.doc)|*.doc";
+            if (savefile.ShowDialog() == true)
+            {
+                TextRange t = new TextRange(Workspace.Document.ContentStart, Workspace.Document.ContentEnd);
+                FileStream file = new FileStream(savefile.FileName, FileMode.Create);
+                t.Save(file, System.Windows.DataFormats.Rtf);
+                file.Close();
+            }
+        }
+
+        /// <summary>
+        /// Handles the Click event of the btn_OpenDoc control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
+        private void btn_OpenDoc_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog dlg = new OpenFileDialog();
+            dlg.Filter = "Document files (*.doc)|*.doc";
+            var result = dlg.ShowDialog();
+            if (result.Value)
+            {
+                TextRange t = new TextRange(Workspace.Document.ContentStart, Workspace.Document.ContentEnd);
+                FileStream file = new FileStream(dlg.FileName, FileMode.Open);
+                t.Load(file, System.Windows.DataFormats.Rtf);
+            }
         }
 
         /// <summary>
@@ -67,7 +321,7 @@ namespace MyBasicTextEditor
             try
             {
                 rng.Font.Name = "Georgia";
-                rng.InsertAfter(new TextRange(rtbEditor.Document.ContentStart, rtbEditor.Document.ContentEnd).Text);
+                rng.InsertAfter(new TextRange(Workspace.Document.ContentStart, Workspace.Document.ContentEnd).Text);
                 object filename = @"C:\Users\andrew.rae\Desktop\MyWord.doc";
                 adoc.SaveAs(ref filename);
                 WordApp.Visible = true;
@@ -215,7 +469,7 @@ namespace MyBasicTextEditor
         /// <param name="e">The <see cref="System.Windows.Controls.TextChangedEventArgs"/> instance containing the event data.</param>
         private void rtbEditor_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
-            docText = new TextRange(this.rtbEditor.Document.ContentStart, this.rtbEditor.Document.ContentEnd).Text;
+            docText = new TextRange(this.Workspace.Document.ContentStart, this.Workspace.Document.ContentEnd).Text;
         }
 
         /// <summary>
