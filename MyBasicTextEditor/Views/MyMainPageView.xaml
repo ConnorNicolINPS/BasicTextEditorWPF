@@ -156,6 +156,20 @@
                 <Button x:Name="TemplateBttn" Click="TemplateBttn_Click">
                     <TextBlock Text="Get Templates" Height="16" />
                 </Button>
+                
+                <TextBlock Text="Tags:" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                <ComboBox x:Name="TagsComboBox" 
+                      Text="tags" 
+                      Width="200"
+                      SelectedItem="{Binding SelectedTag}"
+                      ItemsSource="{Binding TagList}"
+                      DisplayMemberPath="DisplayValue" 
+                      Margin="0,0,10,0"/>
+
+                <Button x:Name="insertTagBttn" Click="insertTagBttn_Click">
+                    <TextBlock Text="insert tag" Width="55" Height="16" Margin="0,0,20,0" />
+                </Button>
+                
                 <Button x:Name="LaunchBttn" Background="Blue" Foreground="White" Padding="10" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Margin="10,0" Click="LaunchBttn_Click">
                     <TextBlock Text="LaunchTemplate" />
                 </Button>

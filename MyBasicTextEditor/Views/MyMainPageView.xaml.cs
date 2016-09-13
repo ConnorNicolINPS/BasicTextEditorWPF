@@ -343,7 +343,7 @@ namespace MyBasicTextEditor
 
             string newText = currentViewModel.ReplaceAllTags(this.docText);
 
-            rtbEditor.Document.Blocks.Clear();
+            Workspace.Document.Blocks.Clear();
             this.Insert(newText);
 
         }
@@ -485,13 +485,13 @@ namespace MyBasicTextEditor
 
         private void Insert(string insertString)
         {
-            rtbEditor.CaretPosition.InsertTextInRun(insertString);
+            Workspace.CaretPosition.InsertTextInRun(insertString);
 
-            TextPointer moveTo = rtbEditor.CaretPosition.GetNextContextPosition(LogicalDirection.Forward);
+            TextPointer moveTo = Workspace.CaretPosition.GetNextContextPosition(LogicalDirection.Forward);
 
             if (moveTo != null)
             {
-                rtbEditor.CaretPosition = moveTo;
+                Workspace.CaretPosition = moveTo;
             }
         }
     }
