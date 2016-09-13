@@ -125,64 +125,68 @@
                     </my:RibbonButton>
                 </my:RibbonGroup>
             </my:RibbonTab>
+            <my:RibbonTab Header="Word Export and Printing">
+                <my:RibbonGroup Header="Print">
+                    <my:RibbonButton LargeImageSource="/Images/Silent.png" x:Name="SilentHiddenPrint"  Foreground="White" Padding="10" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Margin="10,0" Click="SilentHiddenPrint_Click" Label="Silent Print">
+                        <TextBlock Text="Silent hidden Print" />
+                    </my:RibbonButton>
+                    <my:RibbonButton LargeImageSource="/Images/Print.png" x:Name="printWithOptions" Foreground="White" Padding="10" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Margin="10,0" Click="printWithOptions_Click" Label="Print with Options">
+                        <TextBlock Text="Print With Options" />
+                    </my:RibbonButton>
+                </my:RibbonGroup>
+                <my:RibbonGroup Header="Find and Replace">
+                    <Label Content="Patient:"/>
+                    <ComboBox x:Name="PatientsComboBox"
+                              Text="Patients" 
+                              Width="200"
+                              IsEditable="True" 
+                              IsReadOnly="True"
+                              SelectedItem="{Binding SelectedPatient}"
+                              ItemsSource="{Binding PatientList}"
+                              DisplayMemberPath="DisplayName" 
+                              Margin="0,0,20,0"/>
+                    <Label Content="Templates:"/>
+                    <ComboBox x:Name="TemplatesComboBox" 
+                              Text="Templates" 
+                              MinWidth="200"
+                              IsEditable="True" 
+                              IsReadOnly="True"
+                              SelectedItem="{Binding SelectedTemplate}"
+                              ItemsSource="{Binding TemplateList}"/>
+                    <Label Content="Tags:"/>
+                    <ComboBox x:Name="TagsComboBox" 
+                              Text="tags" 
+                              Width="200"
+                              IsEditable="True"
+                              IsReadOnly="True"
+                              Selector.IsSelected="{Binding SelectedTag}"
+                              ItemsSource="{Binding TagList}"
+                              DisplayMemberPath="DisplayValue" 
+                              Margin="0,0,10,0"/>
+                    <my:RibbonButton LargeImageSource="/Images/Replace.png" x:Name="replaceTagBttn" Label="Replace Tag" Click="replaceTagBttn_Click">
+                        <TextBlock Text="replace" Width="40" Height="16" Margin="0,0,20,0" />
+                    </my:RibbonButton>
+                    <my:RibbonButton LargeImageSource="/Images/Insert.png" x:Name="insertTagBttn" Label="Insert Tag" Click="insertTagBttn_Click">
+                        <TextBlock Text="insert tag" Width="55" Height="16" Margin="0,0,20,0" />
+                    </my:RibbonButton>
+                    <my:RibbonButton LargeImageSource="/Images/GetTemplates.png" x:Name="TemplateBttn" Label="Get Templates" Click="TemplateBttn_Click">
+                        <TextBlock Text="Get Templates" Height="16" />
+                    </my:RibbonButton>
+                </my:RibbonGroup>
+                <my:RibbonGroup Header="Launch Word"> 
+                    <my:RibbonButton LargeImageSource="/Images/Word.png" x:Name="LaunchBttn" Foreground="White" Padding="10" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Margin="10,0" Click="LaunchBttn_Click">
+                        <TextBlock Text="LaunchTemplate" />
+                    </my:RibbonButton>
+                </my:RibbonGroup>
+            </my:RibbonTab>
         </my:Ribbon>
-        
+       
         <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <Grid.RowDefinitions>
                 <RowDefinition Height="140"/>
-                <RowDefinition Height="40"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <ToolBar DockPanel.Dock="Top" Height="40" Grid.Row="1">
-                <TextBlock Text="Patients:" VerticalAlignment="Center"/>
-                <ComboBox x:Name="PatientsComboBox" 
-                          Text="Patients" 
-                          Width="200"
-                          SelectedItem="{Binding SelectedPatient}"
-                          ItemsSource="{Binding PatientList}"
-                          DisplayMemberPath="DisplayName" 
-                          Margin="0,0,20,0"/>
-
-                <Button x:Name="replaceTagBttn" Click="replaceTagBttn_Click">
-                    <TextBlock Text="replace" Width="40" Height="16" Margin="0,0,20,0" />
-                </Button>
-                <TextBlock Text="templates:" VerticalAlignment="Center"/>
-                <ComboBox x:Name="TemplatesComboBox" 
-                          Text="templates" 
-                          MinWidth="200"
-                          SelectedItem="{Binding SelectedTemplate}"
-                          ItemsSource="{Binding TemplateList}"/>
-
-                <Button x:Name="TemplateBttn" Click="TemplateBttn_Click">
-                    <TextBlock Text="Get Templates" Height="16" />
-                </Button>
-                
-                <TextBlock Text="Tags:" VerticalAlignment="Center" Margin="10,0,0,0"/>
-                <ComboBox x:Name="TagsComboBox" 
-                      Text="tags" 
-                      Width="200"
-                      SelectedItem="{Binding SelectedTag}"
-                      ItemsSource="{Binding TagList}"
-                      DisplayMemberPath="DisplayValue" 
-                      Margin="0,0,10,0"/>
-
-                <Button x:Name="insertTagBttn" Click="insertTagBttn_Click">
-                    <TextBlock Text="insert tag" Width="55" Height="16" Margin="0,0,20,0" />
-                </Button>
-                
-                <Button x:Name="LaunchBttn" Background="Blue" Foreground="White" Padding="10" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Margin="10,0" Click="LaunchBttn_Click">
-                    <TextBlock Text="LaunchTemplate" />
-                </Button>
-                <Button x:Name="SilentHiddenPrint" Background="Green" Foreground="White" Padding="10" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Margin="10,0" Click="SilentHiddenPrint_Click">
-                    <TextBlock Text="Silent hidden Print" />
-                </Button>
-                <Button x:Name="printWithOptions" Background="red" Foreground="White" Padding="10" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Margin="10,0" Click="printWithOptions_Click">
-                    <TextBlock Text="Print With Options" />
-                </Button>
-            </ToolBar>
-
-            <RichTextBox x:Name="Workspace" TextChanged="rtbEditor_TextChanged" Grid.Row="2"/>
-
+            <RichTextBox x:Name="Workspace" TextChanged="rtbEditor_TextChanged" Grid.Row="1"/>
         </Grid>
     </Grid>
 </view:MvxWpfView>
