@@ -2,46 +2,173 @@
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"           
+      xmlns:my="http://schemas.microsoft.com/winfx/2006/xaml/presentation/ribbon"
       xmlns:local="clr-namespace:MyBasicTextEditor"
       xmlns:view="clr-namespace:MvvmCross.Wpf.Views;assembly=MvvmCross.Wpf"
       mc:Ignorable="d"
-      d:DataContext="{d:DesignData MyMainPageViewModel}"
-      Name="MainPage">
-    <DockPanel>
-        <ToolBar DockPanel.Dock="Top">
-            <TextBlock Text="Patients:" VerticalAlignment="Center"/>
-            <ComboBox x:Name="PatientsComboBox" 
-                      Text="Patients" 
-                      Width="200"
-                      SelectedItem="{Binding SelectedPatient}"
-                      ItemsSource="{Binding PatientList}"
-                      DisplayMemberPath="DisplayName" 
-                      Margin="0,0,20,0"/>
+      d:DataContext="{d:DesignData MyMainPageViewModel}">
+    <Grid MinHeight="500" MinWidth="500" Background="White">
+        <my:Ribbon Name="_ribbon" Margin="0,1,0,361" Height="auto" Width="auto" Panel.ZIndex="20">
+            <my:Ribbon.ApplicationMenu>
+                <my:RibbonApplicationMenu Visibility="Visible">
+                </my:RibbonApplicationMenu>
+            </my:Ribbon.ApplicationMenu>
+            <my:RibbonTab Header="Home">
+                <my:RibbonGroup Header="Edit">
+                    <my:RibbonButton x:Name="_btnPaste" Label="Paste" LargeImageSource="/Images/Paste.png" ToolTip="Paste" Command="{x:Static ApplicationCommands.Paste}" CommandTarget="{Binding ElementName=_richTextBox}">
+                        <my:RibbonButton.ControlSizeDefinition>
+                            <my:RibbonControlSizeDefinition ImageSize="Large" />
+                        </my:RibbonButton.ControlSizeDefinition>
+                    </my:RibbonButton>
+                    <my:RibbonButton x:Name="_btnCut" Label="Cut" SmallImageSource="/Images/Cut.png" ToolTip="Cut" Command="{x:Static ApplicationCommands.Cut}" CommandTarget="{Binding ElementName=_richTextBox}">
+                        <my:RibbonButton.ControlSizeDefinition>
+                            <my:RibbonControlSizeDefinition ImageSize="Small" />
+                        </my:RibbonButton.ControlSizeDefinition>
+                    </my:RibbonButton>
+                    <my:RibbonButton x:Name="_btnCopy" Label="Copy" SmallImageSource="/Images/Copy.png" ToolTip="Copy" Command="{x:Static ApplicationCommands.Copy}" CommandTarget="{Binding ElementName=_richTextBox}">
+                        <my:RibbonButton.ControlSizeDefinition>
+                            <my:RibbonControlSizeDefinition ImageSize="Small" />
+                        </my:RibbonButton.ControlSizeDefinition>
+                    </my:RibbonButton>
+                    <my:RibbonButton x:Name="_btnClear" Label="Clear" SmallImageSource="/Images/Delete.png" ToolTip="Clear" Command="{x:Static EditingCommands.Delete}" CommandTarget="{Binding ElementName=_richTextBox}">
+                        <my:RibbonButton.ControlSizeDefinition>
+                            <my:RibbonControlSizeDefinition ImageSize="Small" />
+                        </my:RibbonButton.ControlSizeDefinition>
+                    </my:RibbonButton>
+                    <my:RibbonButton x:Name="_btnUndo" Label="Undo" SmallImageSource="/Images/Undo.png " ToolTip="Undo" Command="{x:Static ApplicationCommands.Undo}" CommandTarget="{Binding ElementName=_richTextBox}">
+                        <my:RibbonButton.ControlSizeDefinition>
+                            <my:RibbonControlSizeDefinition ImageSize="Small" />
+                        </my:RibbonButton.ControlSizeDefinition>
+                    </my:RibbonButton>
+                    <my:RibbonButton x:Name="_bntRedo" Label="Redo" SmallImageSource="/Images/Redo.png" ToolTip="Redo" Command="{x:Static ApplicationCommands.Redo}" CommandTarget="{Binding ElementName=_richTextBox}">
+                        <my:RibbonButton.ControlSizeDefinition>
+                            <my:RibbonControlSizeDefinition ImageSize="Small" />
+                        </my:RibbonButton.ControlSizeDefinition>
+                    </my:RibbonButton>
+                    <my:RibbonButton x:Name="_btnSelectAll" Label="Select All" ToolTip="Select All" Command="{x:Static ApplicationCommands.SelectAll}" CommandTarget="{Binding ElementName=_richTextBox}" />
+                </my:RibbonGroup>
+                <my:RibbonGroup Header="Font">
+                    <my:RibbonControlGroup>
+                        <ComboBox x:Name="_fontFamily" IsEditable="True" Width="110" ToolTip="Font" SelectionChanged="FontFamily_SelectionChanged" />
+                        <ComboBox x:Name="_fontSize" IsEditable="True" Width="45" ToolTip="FontSize" SelectionChanged="FontSize_SelectionChanged" />
+                    </my:RibbonControlGroup>
+                    <my:RibbonControlGroup>
+                        <my:RibbonToggleButton x:Name="_btnItalic" SmallImageSource="/Images/Italics.png" ToolTip="Italic" Command="{x:Static EditingCommands.ToggleItalic}" CommandTarget="{Binding ElementName=_richTextBox}">
+                            <my:RibbonToggleButton.ControlSizeDefinition>
+                                <my:RibbonControlSizeDefinition ImageSize="Small" IsLabelVisible="False" />
+                            </my:RibbonToggleButton.ControlSizeDefinition>
+                        </my:RibbonToggleButton>
+                        <my:RibbonToggleButton x:Name="_btnUnderline" SmallImageSource="/Images/Underline.png" ToolTip="Underline" Command="{x:Static EditingCommands.ToggleUnderline}" CommandTarget="{Binding ElementName=_richTextBox}">
+                            <my:RibbonToggleButton.ControlSizeDefinition>
+                                <my:RibbonControlSizeDefinition ImageSize="Small" IsLabelVisible="False" />
+                            </my:RibbonToggleButton.ControlSizeDefinition>
+                        </my:RibbonToggleButton>
+                    </my:RibbonControlGroup>
+                </my:RibbonGroup>
+                <my:RibbonGroup Header="Paragraph">
+                    <my:RibbonControlGroup>
+                        <my:RibbonRadioButton x:Name="_btnAlignLeft" Label="" SmallImageSource="/Images/LeftAligned.png" ToolTip="Align Text Left" Command="{x:Static EditingCommands.AlignLeft}" CommandTarget="{Binding ElementName=_richTextBox}">
+                            <my:RibbonRadioButton.ControlSizeDefinition>
+                                <my:RibbonControlSizeDefinition ImageSize="Small" IsLabelVisible="False" />
+                            </my:RibbonRadioButton.ControlSizeDefinition>
+                        </my:RibbonRadioButton>
+                        <my:RibbonRadioButton x:Name="_btnAlignCenter" Label="" SmallImageSource="/Images/CenterAligned.png" ToolTip="Center" Command="{x:Static EditingCommands.AlignCenter}" CommandTarget="{Binding ElementName=_richTextBox}">
+                            <my:RibbonRadioButton.ControlSizeDefinition>
+                                <my:RibbonControlSizeDefinition ImageSize="Small" IsLabelVisible="False" />
+                            </my:RibbonRadioButton.ControlSizeDefinition>
+                        </my:RibbonRadioButton>
+                        <my:RibbonRadioButton x:Name="_btnAlignRight" Label="" SmallImageSource="/Images/RightAligned.png" ToolTip="Align Text Right" Command="{x:Static EditingCommands.AlignRight}" CommandTarget="{Binding ElementName=_richTextBox}" />
+                        <my:RibbonRadioButton x:Name="_btnAlignJustify" Label="" SmallImageSource="/Images/Justified.png" ToolTip="Justify" Command="{x:Static EditingCommands.AlignJustify}" CommandTarget="{Binding ElementName=_richTextBox}">
+                            <my:RibbonRadioButton.ControlSizeDefinition>
+                                <my:RibbonControlSizeDefinition ImageSize="Small" IsLabelVisible="False" />
+                            </my:RibbonRadioButton.ControlSizeDefinition>
+                        </my:RibbonRadioButton>
+                    </my:RibbonControlGroup>
+                    <my:RibbonControlGroup>
+                        <my:RibbonRadioButton x:Name="_btnBullets" Label="" SmallImageSource="/Images/BulletPoints.png" ToolTip="Bullets" Command="{x:Static EditingCommands.ToggleBullets}" CommandTarget="{Binding ElementName=_richTextBox}">
+                            <my:RibbonRadioButton.ControlSizeDefinition>
+                                <my:RibbonControlSizeDefinition ImageSize="Small" IsLabelVisible="False" />
+                            </my:RibbonRadioButton.ControlSizeDefinition>
+                        </my:RibbonRadioButton>
+                        <my:RibbonRadioButton x:Name="_btnNumbers" Label="" SmallImageSource="/Images/BulletPoints.png" ToolTip="Numbering" Command="{x:Static EditingCommands.ToggleNumbering}" CommandTarget="{Binding ElementName=_richTextBox}">
+                            <my:RibbonRadioButton.ControlSizeDefinition>
+                                <my:RibbonControlSizeDefinition ImageSize="Small" IsLabelVisible="False" />
+                            </my:RibbonRadioButton.ControlSizeDefinition>
+                        </my:RibbonRadioButton>
+                    </my:RibbonControlGroup>
+                </my:RibbonGroup>
+                <my:RibbonGroup Header="Image">
+                    <my:RibbonButton Width="53" Height="39" LargeImageSource="/Images/Images.png" ToolTip="Insert Image" Click="btn_importimg_Click" Margin="5,15,5,5">
+                        <my:RibbonButton.ControlSizeDefinition>
+                            <my:RibbonControlSizeDefinition ImageSize="Large" />
+                        </my:RibbonButton.ControlSizeDefinition>
+                    </my:RibbonButton>
+                </my:RibbonGroup>
+                <my:RibbonGroup Header="Font Color">
+                    <my:RibbonButton Width="53" Height="Auto" LargeImageSource="/Images/FontColor.png" ToolTip="Change font color" Click="btn_Font_Click" Margin="5,20,5,5">
+                        <my:RibbonButton.ControlSizeDefinition>
+                            <my:RibbonControlSizeDefinition ImageSize="Large" />
+                        </my:RibbonButton.ControlSizeDefinition>
+                    </my:RibbonButton>
+                </my:RibbonGroup>
+                <my:RibbonGroup Header="File">
+                    <my:RibbonButton LargeImageSource="/Images/Open.png" ToolTip="Open Document File(.doc)" Click="btn_OpenDoc_Click" Margin="5,20,5,5" Height="38" Width="54">
+                        <my:RibbonButton.ControlSizeDefinition>
+                            <my:RibbonControlSizeDefinition ImageSize="Large" />
+                        </my:RibbonButton.ControlSizeDefinition>
+                    </my:RibbonButton>
+                    <my:RibbonButton LargeImageSource="/Images/Save.png" ToolTip="Save As Doc" Click="btn_SaveDoc_Click" Margin="5,20,5,5" Height="41">
+                        <my:RibbonButton.ControlSizeDefinition>
+                            <my:RibbonControlSizeDefinition ImageSize="Large" />
+                        </my:RibbonButton.ControlSizeDefinition>
+                    </my:RibbonButton>
+                </my:RibbonGroup>
+            </my:RibbonTab>
+        </my:Ribbon>
+        
+        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="140"/>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <ToolBar DockPanel.Dock="Top" Height="40" Grid.Row="1">
+                <TextBlock Text="Patients:" VerticalAlignment="Center"/>
+                <ComboBox x:Name="PatientsComboBox" 
+                          Text="Patients" 
+                          Width="200"
+                          SelectedItem="{Binding SelectedPatient}"
+                          ItemsSource="{Binding PatientList}"
+                          DisplayMemberPath="DisplayName" 
+                          Margin="0,0,20,0"/>
 
-            <Button x:Name="replaceTagBttn" Click="replaceTagBttn_Click">
-                <TextBlock Text="replace" Width="40" Height="16" Margin="0,0,20,0" />
-            </Button>
-            <TextBlock Text="templates:" VerticalAlignment="Center"/>
-            <ComboBox x:Name="TemplatesComboBox" 
-                      Text="templates" 
-                      MinWidth="200"
-                      SelectedItem="{Binding SelectedTemplate}"
-                      ItemsSource="{Binding TemplateList}"/>
+                <Button x:Name="replaceTagBttn" Click="replaceTagBttn_Click">
+                    <TextBlock Text="replace" Width="40" Height="16" Margin="0,0,20,0" />
+                </Button>
+                <TextBlock Text="templates:" VerticalAlignment="Center"/>
+                <ComboBox x:Name="TemplatesComboBox" 
+                          Text="templates" 
+                          MinWidth="200"
+                          SelectedItem="{Binding SelectedTemplate}"
+                          ItemsSource="{Binding TemplateList}"/>
 
-            <Button x:Name="TemplateBttn" Click="TemplateBttn_Click">
-                <TextBlock Text="Get Templates" Height="16" />
-            </Button>
-            <Button x:Name="LaunchBttn" Background="Blue" Foreground="White" Padding="10" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Margin="10,0" Click="LaunchBttn_Click">
-                <TextBlock Text="LaunchTemplate" />
-            </Button>
-            <Button x:Name="SilentHiddenPrint" Background="Green" Foreground="White" Padding="10" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Margin="10,0" Click="SilentHiddenPrint_Click">
-                <TextBlock Text="Silent hidden Print" />
-            </Button>
-            <Button x:Name="printWithOptions" Background="red" Foreground="White" Padding="10" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Margin="10,0" Click="printWithOptions_Click">
-                <TextBlock Text="Print With Options" />
-            </Button>
-        </ToolBar>
-        <RichTextBox Name="rtbEditor" TextChanged="rtbEditor_TextChanged" />
-    </DockPanel>
+                <Button x:Name="TemplateBttn" Click="TemplateBttn_Click">
+                    <TextBlock Text="Get Templates" Height="16" />
+                </Button>
+                <Button x:Name="LaunchBttn" Background="Blue" Foreground="White" Padding="10" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Margin="10,0" Click="LaunchBttn_Click">
+                    <TextBlock Text="LaunchTemplate" />
+                </Button>
+                <Button x:Name="SilentHiddenPrint" Background="Green" Foreground="White" Padding="10" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Margin="10,0" Click="SilentHiddenPrint_Click">
+                    <TextBlock Text="Silent hidden Print" />
+                </Button>
+                <Button x:Name="printWithOptions" Background="red" Foreground="White" Padding="10" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Margin="10,0" Click="printWithOptions_Click">
+                    <TextBlock Text="Print With Options" />
+                </Button>
+            </ToolBar>
+
+            <RichTextBox x:Name="Workspace" TextChanged="rtbEditor_TextChanged" Grid.Row="2"/>
+
+        </Grid>
+    </Grid>
 </view:MvxWpfView>
