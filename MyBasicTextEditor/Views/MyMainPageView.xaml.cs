@@ -466,11 +466,11 @@ namespace MyBasicTextEditor
                     {
                         wordPara.Range.Font.Underline = WdUnderline.wdUnderlineSingle;
                     }
-                    else if (inlineText.GetPropertyValue(TextElement.FontStyleProperty).ToString() == "Italic")
+                    if (inlineText.GetPropertyValue(TextElement.FontStyleProperty).ToString() == "Italic")
                     {
                         wordPara.Range.Font.Italic = 1;
                     }
-                    else if (inlineText.GetPropertyValue(TextElement.FontStyleProperty).ToString() == "Bold")
+                    if (inlineText.GetPropertyValue(TextElement.FontStyleProperty).ToString() == "Bold")
                     {
                         wordPara.Range.Font.Bold = 1; 
                     }
