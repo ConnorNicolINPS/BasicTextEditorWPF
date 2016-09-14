@@ -464,6 +464,9 @@ namespace MyBasicTextEditor
             ///WordDoc.PrintOut();
         }
 
+        /// <summary>
+        /// Formats the word document.
+        /// </summary>
         private void FormatWordDoc()
         {
             foreach (System.Windows.Documents.Paragraph para in Workspace.Document.Blocks)
@@ -477,16 +480,24 @@ namespace MyBasicTextEditor
                     wordPara.Range.Font.Underline = inlineText.GetPropertyValue(Inline.TextDecorationsProperty) == TextDecorations.Underline ? WdUnderline.wdUnderlineSingle : WdUnderline.wdUnderlineNone;
                     wordPara.Range.Font.Italic = inlineText.GetPropertyValue(TextElement.FontStyleProperty).ToString().Equals("Italic") ? 1 : 0;
                     wordPara.Range.Font.Bold = inlineText.GetPropertyValue(TextElement.FontWeightProperty).ToString().Equals("Bold") ? 1 : 0;
+                    
 
                     SolidColorBrush SCBrush = (SolidColorBrush)inline.Foreground;
                     wordPara.Range.Font.Color = (WdColor)(SCBrush.Color.R + 0x100 * SCBrush.Color.G + 0x10000 * SCBrush.Color.B);
                     wordPara.Range.Font.Size = (float)inline.FontSize;
                     wordPara.Range.Font.Name = inline.FontFamily.ToString();
+
+
+                    wordPara.Range.ParagraphFormat.Alignment =
+                        inlineText.GetPropertyValue(System.Windows.Documents.Paragraph.TextAlignmentProperty).ToString().Equals("Center") ? WdParagraphAlignment.wdAlignParagraphCenter :
+                        inlineText.GetPropertyValue(System.Windows.Documents.Paragraph.TextAlignmentProperty).ToString().Equals("Right") ? WdParagraphAlignment.wdAlignParagraphRight :
+                        inlineText.GetPropertyValue(System.Windows.Documents.Paragraph.TextAlignmentProperty).ToString().Equals("Justify") ? WdParagraphAlignment.wdAlignParagraphJustify :
+                        WdParagraphAlignment.wdAlignParagraphLeft;
+
                     wordPara.Range.InsertParagraphAfter();
                 }
             }
         }
-
 
         /// <summary>
         /// Handles the TextChanged event of the rtbEditor control.
