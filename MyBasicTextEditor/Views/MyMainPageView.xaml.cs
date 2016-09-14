@@ -458,6 +458,10 @@ namespace MyBasicTextEditor
 
             WordApp.Visible = true;
             WordDoc = WordApp.Documents.Add();
+            WordApp.ActiveDocument.PageSetup.TopMargin = 20;
+            WordApp.ActiveDocument.PageSetup.BottomMargin = 20;
+            WordApp.ActiveDocument.PageSetup.RightMargin = 15;
+            WordApp.ActiveDocument.PageSetup.LeftMargin = 15;
 
             this.FormatWordDoc();
 

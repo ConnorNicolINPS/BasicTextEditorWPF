@@ -230,11 +230,15 @@
                 <RowDefinition Height="140"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <RichTextBox x:Name="Workspace" 
-                         TextChanged="rtbEditor_TextChanged" 
-                         Grid.Row="1" 
-                         ScrollViewer.VerticalScrollBarVisibility="Auto" 
-                         ScrollViewer.HorizontalScrollBarVisibility="Auto"/>
+            <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                <RichTextBox x:Name="Workspace" 
+                             Padding="15,20"
+                             TextChanged="rtbEditor_TextChanged" 
+                             ScrollViewer.VerticalScrollBarVisibility="Auto" 
+                             ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                             Width="768"
+                             Height="1104"/>
+            </ScrollViewer>
         </Grid>
     </Grid>
 </view:MvxWpfView>
