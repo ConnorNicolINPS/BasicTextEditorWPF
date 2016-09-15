@@ -438,8 +438,12 @@ namespace MyBasicTextEditor
         {
             ApplicationClass WordApp = new ApplicationClass();
 
-            WordApp.Visible = true;
+            
             WordDoc = WordApp.Documents.Add();
+            WordApp.ActiveDocument.PageSetup.TopMargin = 20;
+            WordApp.ActiveDocument.PageSetup.BottomMargin = 20;
+            WordApp.ActiveDocument.PageSetup.RightMargin = 15;
+            WordApp.ActiveDocument.PageSetup.LeftMargin = 15;
 
             this.FormatWordDoc();
 
@@ -455,17 +459,16 @@ namespace MyBasicTextEditor
         private void SilentHiddenPrint_Click(object sender, RoutedEventArgs e)
         {
             ApplicationClass WordApp = new ApplicationClass();
-
-            WordApp.Visible = true;
+            
             WordDoc = WordApp.Documents.Add();
-            WordApp.ActiveDocument.PageSetup.TopMargin = 20;
-            WordApp.ActiveDocument.PageSetup.BottomMargin = 20;
-            WordApp.ActiveDocument.PageSetup.RightMargin = 15;
-            WordApp.ActiveDocument.PageSetup.LeftMargin = 15;
+            WordApp.ActiveDocument.PageSetup.TopMargin = 40;
+            WordApp.ActiveDocument.PageSetup.BottomMargin = 40;
+            WordApp.ActiveDocument.PageSetup.RightMargin = 35;
+            WordApp.ActiveDocument.PageSetup.LeftMargin = 35;
 
             this.FormatWordDoc();
 
-            ///WordDoc.PrintOut();
+            WordDoc.PrintOut();
         }
 
         /// <summary>
