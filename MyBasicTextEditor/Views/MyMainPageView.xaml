@@ -232,7 +232,7 @@
             </Grid.RowDefinitions>
             <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
                 <RichTextBox x:Name="Workspace" 
-                             Padding="15,20"
+                             Padding="35,40"
                              TextChanged="rtbEditor_TextChanged" 
                              ScrollViewer.VerticalScrollBarVisibility="Auto" 
                              ScrollViewer.HorizontalScrollBarVisibility="Auto"
